@@ -15,34 +15,35 @@ public class Coordinate {
     @NonNull
     private String world;
     @NonNull
-    private int x;
+    private double x;
     @NonNull
-    private int y;
+    private double y;
     @NonNull
-    private int z;
+    private double z;
     private float yaw;
     private float pitch;
 
     public static Coordinate fromLocation(Location location) {
         return Coordinate.builder()
                 .world(location.getWorld().getName())
-                .x(location.getBlockX())
-                .y(location.getBlockY())
-                .z(location.getBlockZ())
+                .x(location.getX())
+                .y(location.getY())
+                .z(location.getZ())
                 .yaw(location.getYaw())
                 .pitch(location.getPitch())
                 .build();
     }
 
-    public boolean sameVector (Vector vector) {
+    public boolean aboutSameVector (Vector vector) {
         Vector compare = toVector();
         return compare.getBlockX() == vector.getBlockX() &&
                 compare.getBlockY() == vector.getBlockY() &&
                 compare.getBlockZ() == vector.getBlockZ();
     }
+
     public boolean sameLocation (Location location) {
         return location.getWorld().getName().equals(world) &&
-                sameVector(location.toVector());
+                aboutSameVector(location.toVector());
     }
 
     public Vector toVector () {
@@ -52,20 +53,5 @@ public class Coordinate {
     public Location toLocation() {
         final World world = Bukkit.getWorld(this.world);
         return new Location(world, x, y, z, yaw, pitch);
-    }
-
-    public void setVector (Vector vector) {
-        x = vector.getBlockX();
-        y = vector.getBlockY();
-        z = vector.getBlockZ();
-    }
-
-    public void setLocation(Location location) {
-        x = location.getBlockX();
-        y = location.getBlockY();
-        z = location.getBlockZ();
-        yaw = location.getYaw();
-        pitch = location.getPitch();
-
     }
 }

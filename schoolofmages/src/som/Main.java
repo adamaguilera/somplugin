@@ -1,5 +1,6 @@
 package som;
 
+import org.bukkit.Bukkit;
 import som.chat.Log;
 import som.command.CommandHandler;
 import som.game.Game;
@@ -27,10 +28,11 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable () {
         instance = this;
+        Log.UPDATE_INSTANCE();
         this.config = new ConfigLoader();
         this.config.loadAll();
         this.playerManager = new PlayerManager();
-        this.game = new Game(this.playerManager);
+        this.game = new Game(config.getGameConfig(), this.playerManager);
         this.lobby = Lobby.builder()
                 .game(this.game)
                 .build();
@@ -38,13 +40,13 @@ public class Main extends JavaPlugin {
         this.loginManager = LoginManager.builder()
                 .lobby(this.lobby)
                 .playerManager(this.playerManager)
+                .game(this.game)
                 .build();
         this.commandHandler = CommandHandler.builder()
                 .lobby(this.lobby)
                 .playerManager(this.playerManager)
                 .build();
         this.getServer().getPluginManager().registerEvents(loginManager, this);
-        Log.UPDATE_INSTANCE();
         Log.INFO(ENABLED_PLUGIN);
 
     }
