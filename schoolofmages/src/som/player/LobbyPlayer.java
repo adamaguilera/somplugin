@@ -1,5 +1,6 @@
 package som.player;
 
+import org.bukkit.inventory.ItemStack;
 import som.chat.Chat;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class LobbyPlayer {
     public void enableLobbySettings () {
         this.inLobby = true;
         getPlayer().ifPresent(player -> {
+            player.getInventory().setContents(new ItemStack[]{});
             player.setGameMode(GameMode.SPECTATOR);
         });
         chat.commandMessage(this.playerID, JOINED_LOBBY);
@@ -42,6 +44,7 @@ public class LobbyPlayer {
         this.inLobby = false;
         getPlayer().ifPresent(player -> {
             player.setGameMode(GameMode.SURVIVAL);
+            player.getInventory().setContents(new ItemStack[]{});
             player.setHealth(20.0);
             player.setFoodLevel(20);
             player.setSaturation(3.0f);

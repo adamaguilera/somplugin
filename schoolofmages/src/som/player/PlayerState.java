@@ -1,11 +1,14 @@
 package som.player;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import som.chat.Chat;
 import som.game.mage.Mage;
+import som.game.spawn.PlatformPlayer;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -16,7 +19,11 @@ public class PlayerState implements Comparable<PlayerState> {
     @Getter
     final LobbyPlayer lobbyPlayer;
     @Getter
+    final PlatformPlayer platformPlayer;
+    @Getter
     final Mage mage = new Mage();
+    @Setter @Getter
+    final boolean inGame = false;
 
     Chat chat = new Chat();
 
@@ -24,7 +31,9 @@ public class PlayerState implements Comparable<PlayerState> {
     public PlayerState (final UUID playerID) {
         this.playerID = playerID;
         this.lobbyPlayer = new LobbyPlayer(playerID);
-
+        this.platformPlayer = PlatformPlayer.builder()
+                .playerID(playerID)
+                .build();
     }
 
     public Optional<Player> getPlayer() {

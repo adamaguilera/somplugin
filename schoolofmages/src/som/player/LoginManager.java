@@ -2,6 +2,7 @@ package som.player;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerJoinEvent;
+import som.game.Game;
 import som.game.mage.Mage;
 import som.lobby.Lobby;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class LoginManager implements Listener {
     final PlayerManager playerManager;
     final Lobby lobby;
+    final Game game;
 
     @EventHandler
     public void onPlayerLoginEvent (final PlayerLoginEvent login) {
@@ -53,10 +55,10 @@ public class LoginManager implements Listener {
     private void login (final PlayerState playerState) {
         if (lobby.isEnabled()) {
             lobby.addPlayer(playerState);
+            game.teleportToSpawn(playerState);
         } else {
 
         }
     }
-
 
 }

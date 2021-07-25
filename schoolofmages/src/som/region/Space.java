@@ -2,12 +2,13 @@ package som.region;
 
 
 import lombok.Builder;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 @Builder
 public class Space {
-    @NotNull
+    @NotNull @Getter
     private final Coordinate first;
     @NotNull
     private final Coordinate second;
@@ -20,9 +21,9 @@ public class Space {
                 (cmp (first.getZ(), second.getZ(), location.getBlockZ()));
     }
 
-    private boolean cmp (int c1, int c2, int test) {
-        int min = Math.min (c1, c2);
-        int max = Math.max (c1, c2);
+    private boolean cmp (double c1, double c2, int test) {
+        double min = Math.min (c1, c2);
+        double max = Math.max (c1, c2);
 
         if (test >= min) {
             if (test <= max) {
@@ -30,6 +31,10 @@ public class Space {
             }
         }
         return false;
+    }
+
+    public double getMinY() {
+        return Math.min(first.getY(), second.getY());
     }
 
 }
