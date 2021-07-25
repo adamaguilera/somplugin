@@ -4,6 +4,8 @@ import lombok.Builder;
 import som.chat.Chat;
 import som.game.Game;
 import som.helper.RunnableTask;
+import som.player.LobbyPlayer;
+import som.player.PlayerManager;
 import som.player.PlayerState;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +21,7 @@ public class Lobby {
     final String COUNTDOWN_START_MSG = "Starting countdown till game start.";
     final int COUNTDOWN_IN_SEC = 5;
 
-    final List<PlayerState> players = new ArrayList<>();
+    final PlayerManager playerManager;
     final Chat chat = new Chat();
     @Setter @Getter
     boolean isEnabled;
@@ -28,8 +30,12 @@ public class Lobby {
     final Game game;
 
 
+    private List<PlayerState> getPlayers () {
+        return playerManager.getAllPlayers();
+    }
+
     public boolean allPlayersReady () {
-        for (PlayerState playerState : players) {
+        for (PlayerState playerState : this.getPlayers()) {
             if (!playerState.isLobbyReady()) {
                 return false;
             }
@@ -42,10 +48,10 @@ public class Lobby {
     }
 
     private String getAmountReadyMessage () {
-        int amountReady = players.stream()
+        int amountReady = this.getPlayers().stream()
                 .mapToInt(playerState -> playerState.isLobbyReady() ? 1 : 0)
                 .sum();
-        int total = players.size();
+        int total = this.getPlayers().size();
         return "There are (" + ChatColor.AQUA + amountReady +
                 ChatColor.LIGHT_PURPLE + "/" +
                 ChatColor.AQUA + total +
@@ -67,12 +73,19 @@ public class Lobby {
         return () -> {
             if (allPlayersReady()) {
                 isEnabled = false;
+                this.onLobbyEnd();
                 game.onStart();
             } else {
                 chat.globalMessage(COUNTDOWN_CANCELLED_MSG);
                 broadcastAmountReadyMessage();
             }
         };
+    }
+
+    private void onLobbyEnd () {
+        this.getPlayers().stream()
+                .map(PlayerState::getLobbyPlayer)
+                .forEach(LobbyPlayer::disableLobbySettings);
     }
 
     public Runnable countdownMsg () {
@@ -91,7 +104,6 @@ public class Lobby {
     }
 
     public void addPlayer (final PlayerState playerState) {
-        this.players.add(playerState);
         playerState.onAddedToLobby();
     }
 }

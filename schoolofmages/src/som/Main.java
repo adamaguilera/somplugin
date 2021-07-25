@@ -35,6 +35,7 @@ public class Main extends JavaPlugin {
         this.game = new Game(config.getGameConfig(), this.playerManager);
         this.lobby = Lobby.builder()
                 .game(this.game)
+                .playerManager(this.playerManager)
                 .build();
         this.lobby.setEnabled(true);
         this.loginManager = LoginManager.builder()

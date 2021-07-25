@@ -4,7 +4,6 @@ import lombok.Data;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import som.chat.Log;
 import som.region.Coordinate;
 import som.region.Space;
 
@@ -27,7 +26,7 @@ public class Platform {
                         x == -1*PLATFORM_RADIUS && z == PLATFORM_RADIUS ||
                         x == PLATFORM_RADIUS && z == -1*PLATFORM_RADIUS) {
                     Location torchLocation = new Location(getWorld(), x, platform.getMinY() + 1, z);
-                    torchLocation.getBlock().setType(getPlatformType());
+                    torchLocation.getBlock().setType(getTorchType());
                 }
             }
         }
