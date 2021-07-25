@@ -1,6 +1,8 @@
 package som.lobby;
 
+import lombok.Builder;
 import som.chat.Chat;
+import som.game.Game;
 import som.helper.RunnableTask;
 import som.player.PlayerState;
 import lombok.Getter;
@@ -10,18 +12,20 @@ import org.bukkit.ChatColor;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 public class Lobby {
     final String GAME_START_MSG = "Game has started!";
     final String COUNTDOWN_CANCELLED_MSG = "Countdown has been cancelled!";
     final String COUNTDOWN_START_MSG = "Starting countdown till game start.";
     final int COUNTDOWN_IN_SEC = 10;
 
-    List<PlayerState> players = new ArrayList<>();
-    Chat chat = new Chat();
+    final List<PlayerState> players = new ArrayList<>();
+    final Chat chat = new Chat();
     @Setter @Getter
     boolean isEnabled;
 
     RunnableTask countdownRunnable;
+    final Game game;
 
 
     public boolean allPlayersReady () {
@@ -49,7 +53,7 @@ public class Lobby {
     }
 
     public void startCountdownIfReady() {
-        if (allPlayersReady()) {
+        if (allPlayersReady() && isEnabled) {
             countdownRunnable = RunnableTask.builder()
                     .onTaskTick(countdownMsg())
                     .onTaskEnd(startGame())
@@ -62,7 +66,8 @@ public class Lobby {
     public Runnable startGame () {
         return () -> {
             if (allPlayersReady()) {
-                chat.globalMessage(GAME_START_MSG);
+                isEnabled = false;
+                game.onStart();
             } else {
                 chat.globalMessage(COUNTDOWN_CANCELLED_MSG);
                 broadcastAmountReadyMessage();
