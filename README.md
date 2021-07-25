@@ -1,9 +1,9 @@
-# League of Crafters
+# School of Mages
 
 # Local Setup on IntelliJ
 - Ensure java version 16 is installed on your local machine with a JDK
-- Ensure you have a server folder in the same directory that holds `locplugin`
-    - Preferrably, use the locserver as the server accessible [here](https://gitlab.com/adamaguilera/locserver)
+- Ensure you have a server folder in the same directory that holds `somplugin`
+    - Preferrably, use the somserver as the server accessible [here](https://gitlab.com/adamaguilera/locserver)
 - Clone the project and open it in IntelliJ
 - Under Project Structure >>> Project >>> Project SDK set java to 16
 - Under Project Structure >>> Artifacts, create one for building the JAR plugin file

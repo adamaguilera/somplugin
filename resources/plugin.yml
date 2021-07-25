@@ -1,0 +1,10 @@
+name: SchoolOfMages
+authors: [AdamAguilera]
+description: Battlegrounds Plugin
+version: 1.0
+api-version: 1.17
+main: som.Main
+commands:
+  som:
+    description: This is som command
+    usage: /som <heroname>

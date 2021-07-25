@@ -1,4 +1,4 @@
-package bukkit.command.type;
+package som.command.type;
 
 public class AdminCommand {
 }

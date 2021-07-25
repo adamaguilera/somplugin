@@ -1,4 +1,4 @@
-package bukkit;
+package som;
 
 public class GameListener {
 }

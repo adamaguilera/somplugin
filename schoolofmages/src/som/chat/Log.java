@@ -1,6 +1,6 @@
-package bukkit.chat;
+package som.chat;
 
-import bukkit.Main;
+import som.Main;
 
 import java.util.logging.Level;
 
