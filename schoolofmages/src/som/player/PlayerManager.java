@@ -1,6 +1,9 @@
 package som.player;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class PlayerManager {
@@ -17,5 +20,16 @@ public class PlayerManager {
             return players.get(playerID);
         }
         return initializePlayer(playerID);
+    }
+
+    public List<PlayerState> getAllPlayers () {
+        return new ArrayList<>(players.values());
+    }
+
+    public List<PlayerState> getPlayersByRank() {
+        List<PlayerState> allPlayers = getAllPlayers();
+        Collections.sort(allPlayers);
+        return allPlayers;
+
     }
 }

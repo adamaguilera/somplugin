@@ -2,6 +2,7 @@ package som;
 
 import som.chat.Log;
 import som.command.CommandHandler;
+import som.game.Game;
 import som.lobby.Lobby;
 import som.player.LoginManager;
 import org.bukkit.command.Command;
@@ -17,7 +18,8 @@ public class Main extends JavaPlugin {
     CommandHandler commandHandler;
     LoginManager loginManager;
     PlayerManager playerManager;
-    Lobby lobby = new Lobby();
+    Lobby lobby;
+    Game game;
 
     final String ENABLED_PLUGIN = "League of Crafters has been enabled!";
     final String DISABLED_PLUGIN = "League of Crafters has been disabled!";
@@ -27,8 +29,12 @@ public class Main extends JavaPlugin {
         instance = this;
         this.config = new ConfigLoader();
         this.config.loadAll();
-        this.lobby.setEnabled(true);
         this.playerManager = new PlayerManager();
+        this.game = new Game(this.playerManager);
+        this.lobby = Lobby.builder()
+                .game(this.game)
+                .build();
+        this.lobby.setEnabled(true);
         this.loginManager = LoginManager.builder()
                 .lobby(this.lobby)
                 .playerManager(this.playerManager)
