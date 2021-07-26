@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import som.game.spell.SpellPool;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,7 +20,14 @@ public class PlatformPlayer {
     final PotionEffect SLOW_FALLING = new PotionEffect(
             PotionEffectType.SLOW_FALLING,
             20*5, 0, false, false);
-    final int AUTO_LAND_Y = 100;
+    final PotionEffect SHORT_RESISTANCE = new PotionEffect(
+            PotionEffectType.DAMAGE_RESISTANCE,
+            20*5, 100, false, false);
+    final PotionEffect INFINITE_RESISTANCE = new PotionEffect(
+            PotionEffectType.DAMAGE_RESISTANCE,
+            Integer.MAX_VALUE, 90, false, false);
+    final int AUTO_LAND_Y = 125;
+    final int JUMPED_Y = 254;
     ItemStack[] storageContents;
     ItemStack[] armorContents;
 
@@ -28,18 +36,22 @@ public class PlatformPlayer {
             saveInventory();
         }
         clearInventory();
-        giveFlyInventory();
+        giveFlySetup();
     }
 
     public void onLand () {
         clearInventory();
         giveInventory();
-        giveSlowFalling();
+        giveShortBuff();
     }
 
     public void checkLand () {
         if (hasSavedInventory()) {
             getPlayer().ifPresent(player -> {
+                if (player.getLocation().getY() > AUTO_LAND_Y &&
+                        player.getLocation().getY() <= JUMPED_Y) {
+                    player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                }
                 if (player.getLocation().getY() <= AUTO_LAND_Y) {
                     onLand();
                 }
@@ -47,11 +59,10 @@ public class PlatformPlayer {
         }
     }
 
-    private void giveSlowFalling () {
+    private void giveShortBuff () {
         getPlayer().ifPresent(player -> {
-            if (player.getVelocity().getY() < 0) {
-                player.addPotionEffect(SLOW_FALLING);
-            }
+            player.addPotionEffect(SHORT_RESISTANCE);
+            player.addPotionEffect(SLOW_FALLING);
         });
     }
 
@@ -76,9 +87,16 @@ public class PlatformPlayer {
         return new ItemStack(Material.ELYTRA, 1);
     }
 
-    private void giveFlyInventory () {
-        getPlayer().ifPresent(player ->
-                player.getInventory().setChestplate(getElytra()));
+    private ItemStack getSpellBook () {
+        return SpellPool.GET_SPELL_BOOK().getSpellDisplay();
+    }
+
+    private void giveFlySetup() {
+        getPlayer().ifPresent(player -> {
+            player.getInventory().setChestplate(getElytra());
+            player.getInventory().addItem(getSpellBook());
+            player.addPotionEffect(INFINITE_RESISTANCE);
+        });
     }
 
     private void giveInventory () {

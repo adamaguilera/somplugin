@@ -1,6 +1,13 @@
 package som.game;
 
+import lombok.Getter;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import som.Main;
 import som.chat.Chat;
+import som.game.mage.Mage;
+import som.game.mage.inventory.InventoryHandler;
+import som.game.mage.inventory.StartingInventory;
 import som.game.scoreboard.Leaderboard;
 import som.game.spawn.Platform;
 import som.game.spawn.PlatformPlayer;
@@ -12,6 +19,7 @@ import som.task.TaskRegister;
 
 public class Game {
     final String ON_GAME_START = "Game has started!";
+    @Getter
     final PlayerManager playerManager;
     final Leaderboard leaderboard;
     final Platform platform;
@@ -34,11 +42,12 @@ public class Game {
         this.taskRegister.addTask(platformTask);
     }
 
-
     public void onStart () {
         leaderboard.updateLeaderboards();
         chat.globalMessage(ON_GAME_START);
+        Main.GET_INSTANCE().registerGameListener();
         taskRegister.start();
+        this.giveStartingItems();
         this.spawnAllPlayers();
     }
 
@@ -48,6 +57,14 @@ public class Game {
             platformPlayer.onSpawn();
         }
         teleportToSpawn(playerState);
+    }
+
+    private void giveStartingItems () {
+        playerManager.getAllPlayers().stream()
+                .map(PlayerState::getMage)
+                .map(Mage::getInventoryHandler)
+                .map(InventoryHandler::getStartingInventory)
+                .forEach(StartingInventory::giveStartingInventory);
     }
 
     private void spawnAllPlayers () {

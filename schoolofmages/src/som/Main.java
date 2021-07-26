@@ -19,11 +19,16 @@ public class Main extends JavaPlugin {
     CommandHandler commandHandler;
     LoginManager loginManager;
     PlayerManager playerManager;
+    GameListener gameListener;
     Lobby lobby;
     Game game;
 
     final String ENABLED_PLUGIN = "League of Crafters has been enabled!";
     final String DISABLED_PLUGIN = "League of Crafters has been disabled!";
+
+    public static Main GET_INSTANCE () {
+        return instance;
+    }
 
     @Override
     public void onEnable () {
@@ -47,6 +52,10 @@ public class Main extends JavaPlugin {
                 .lobby(this.lobby)
                 .playerManager(this.playerManager)
                 .build();
+        this.gameListener = GameListener.builder()
+                .game(this.game)
+                .playerManager(this.playerManager)
+                .build();
         this.getServer().getPluginManager().registerEvents(loginManager, this);
         Log.INFO(ENABLED_PLUGIN);
 
@@ -57,8 +66,8 @@ public class Main extends JavaPlugin {
         Log.INFO(DISABLED_PLUGIN);
     }
 
-    public static Main GET_INSTANCE () {
-        return instance;
+    public void registerGameListener () {
+        this.getServer().getPluginManager().registerEvents(gameListener, this);
     }
 
     @Override

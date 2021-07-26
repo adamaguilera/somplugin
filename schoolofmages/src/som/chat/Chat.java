@@ -19,6 +19,10 @@ public class Chat {
         sendMessage(playerID, formatCommandMessage(message));
     }
 
+    public void abilityMessage (final UUID playerID, final String message) {
+        sendMessage(playerID, formatCommandMessage(message));
+    }
+
     private String formatCommandMessage (final String message) {
         return ChatColor.LIGHT_PURPLE + message + ChatColor.WHITE;
     }

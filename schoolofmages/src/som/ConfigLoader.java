@@ -6,6 +6,7 @@ import lombok.Data;
 import som.chat.Chat;
 import som.chat.Log;
 import som.game.GameConfig;
+import som.game.spell.SpellPool;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import som.chat.Chat;
+import som.chat.Log;
 import som.game.mage.Mage;
 import som.game.spawn.PlatformPlayer;
 
@@ -21,7 +22,7 @@ public class PlayerState implements Comparable<PlayerState> {
     @Getter
     final PlatformPlayer platformPlayer;
     @Getter
-    final Mage mage = new Mage();
+    final Mage mage;
     @Setter @Getter
     final boolean inGame = false;
 
@@ -34,6 +35,7 @@ public class PlayerState implements Comparable<PlayerState> {
         this.platformPlayer = PlatformPlayer.builder()
                 .playerID(playerID)
                 .build();
+        this.mage = new Mage (this);
     }
 
     public Optional<Player> getPlayer() {
