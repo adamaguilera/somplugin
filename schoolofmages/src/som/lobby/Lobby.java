@@ -19,7 +19,7 @@ public class Lobby {
     final String GAME_START_MSG = "Game has started!";
     final String COUNTDOWN_CANCELLED_MSG = "Countdown has been cancelled!";
     final String COUNTDOWN_START_MSG = "Starting countdown till game start.";
-    final int COUNTDOWN_IN_SEC = 5;
+    final int COUNTDOWN_IN_SEC = 2;
 
     final PlayerManager playerManager;
     final Chat chat = new Chat();

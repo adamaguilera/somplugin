@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import som.chat.Chat;
+import som.game.spell.SpellName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class CooldownHandler {
     // name of ability using this cooldown object
     @NotNull
     @Getter
-    private final String spellName;
+    private final SpellName spellName;
 
     // last time the ability was cast
     private long lastCast = Long.MIN_VALUE;

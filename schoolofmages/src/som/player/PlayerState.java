@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import som.chat.Chat;
 import som.chat.Log;
 import som.game.mage.Mage;
-import som.game.spawn.PlatformPlayer;
+import som.game.passive.PassivePool;
+import som.game.spell.SpellPool;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -20,8 +21,6 @@ public class PlayerState implements Comparable<PlayerState> {
     @Getter
     final LobbyPlayer lobbyPlayer;
     @Getter
-    final PlatformPlayer platformPlayer;
-    @Getter
     final Mage mage;
     @Setter @Getter
     final boolean inGame = false;
@@ -29,13 +28,12 @@ public class PlayerState implements Comparable<PlayerState> {
     Chat chat = new Chat();
 
 
-    public PlayerState (final UUID playerID) {
+    public PlayerState (final UUID playerID,
+                        final SpellPool spellPool,
+                        final PassivePool passivePool) {
         this.playerID = playerID;
         this.lobbyPlayer = new LobbyPlayer(playerID);
-        this.platformPlayer = PlatformPlayer.builder()
-                .playerID(playerID)
-                .build();
-        this.mage = new Mage (this);
+        this.mage = new Mage (this, spellPool, passivePool);
     }
 
     public Optional<Player> getPlayer() {

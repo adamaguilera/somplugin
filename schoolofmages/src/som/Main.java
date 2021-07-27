@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import som.chat.Log;
 import som.command.CommandHandler;
 import som.game.Game;
+import som.game.passive.PassivePool;
+import som.game.spell.SpellPool;
 import som.lobby.Lobby;
 import som.player.LoginManager;
 import org.bukkit.command.Command;
@@ -20,6 +22,8 @@ public class Main extends JavaPlugin {
     LoginManager loginManager;
     PlayerManager playerManager;
     GameListener gameListener;
+    SpellPool spellPool;
+    PassivePool passivePool;
     Lobby lobby;
     Game game;
 
@@ -36,7 +40,10 @@ public class Main extends JavaPlugin {
         Log.UPDATE_INSTANCE();
         this.config = new ConfigLoader();
         this.config.loadAll();
-        this.playerManager = new PlayerManager();
+        this.spellPool = new SpellPool();
+        this.passivePool = new PassivePool();
+        this.playerManager = new PlayerManager(this.spellPool,
+                this.passivePool);
         this.game = new Game(config.getGameConfig(), this.playerManager);
         this.lobby = Lobby.builder()
                 .game(this.game)

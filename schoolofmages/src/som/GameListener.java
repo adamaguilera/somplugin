@@ -35,7 +35,8 @@ public class GameListener implements Listener {
         PlayerState playerState = playerManager.getPlayerState(playerID);
         Mage mage = playerState.getMage();
         SpellManager spellManager = mage.getSpellManager();
-        spellManager.onPlayerInteractEvent(event);
+        boolean shouldCancel = spellManager.onPlayerInteractEvent(event);
+        event.setCancelled(shouldCancel);
     }
 
     @EventHandler

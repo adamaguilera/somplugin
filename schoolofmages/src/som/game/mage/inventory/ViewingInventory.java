@@ -31,7 +31,7 @@ public class ViewingInventory {
     }
 
     public boolean isViewingInventory (final Inventory inventory) {
-        return viewingInventory.map(curr -> curr.equals(inventory)).isPresent();
+        return viewingInventory.filter(curr -> curr.equals(inventory)).isPresent();
     }
 
     /**

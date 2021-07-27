@@ -2,7 +2,7 @@ package som.game.spell.spells;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import som.game.spell.Spell;
 import som.game.spell.SpellName;
 import som.game.spell.cooldown.CooldownHandler;
@@ -13,14 +13,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SpellBook extends Spell {
-    final SpellName NAME = SpellName.SpellBook;
-    final String DISPLAY_NAME = ChatColor.GOLD + "Spell Book";
-    final List<String> DESCRIPTION = List.of("Use this to see all your spells!");
-    final Material DISPLAY_TYPE = Material.ENCHANTED_BOOK;
+public class ParachuteSpell extends Spell {
+    final String DISPLAY_NAME = ChatColor.GREEN + "Parachute";
+    final SpellName NAME = SpellName.ParachuteSpell;
+    final List<String> DESCRIPTION = List.of(
+            "Hold this when falling to land!",
+            "Use it to get an Elytra!");
+    final Material DISPLAY_TYPE = Material.BIG_DRIPLEAF;
     final int COST = 0;
-    final int COOLDOWN_MILLIS = 1000;
-    final List<Material> spellItems = List.of(Material.ENCHANTED_BOOK);
+    final int COOLDOWN_MILLIS = 120*1000;
+    final String COOLDOWN_MSG = "Elytra on cooldown for _ more seconds!";
+    final List<Material> spellItems = List.of(Material.BIG_DRIPLEAF);
     final boolean SHOULD_CANCEL_EVENT = true;
     final HashMap<UUID, CooldownHandler> players = new HashMap<>();
 
@@ -38,7 +41,7 @@ public class SpellBook extends Spell {
     }
 
     @Override
-    public Material getDisplayType () {
+    public Material getDisplayType() {
         return DISPLAY_TYPE;
     }
 
@@ -53,44 +56,49 @@ public class SpellBook extends Spell {
     }
 
     @Override
-    public Optional<CooldownHandler> getCooldownHandler(final UUID playerID) {
+    public Optional<CooldownHandler> getCooldownHandler(UUID playerID) {
         return Optional.ofNullable(players.get(playerID));
     }
 
     @Override
-    public boolean hasSpell(final UUID playerID) {
+    public boolean hasSpell(UUID playerID) {
         return players.containsKey(playerID);
     }
 
     @Override
-    public CooldownHandler initializeCooldownHandler (final UUID playerID) {
+    public CooldownHandler initializeCooldownHandler(UUID playerID) {
         return CooldownHandler.builder()
                 .spellName(getName())
                 .playerID(playerID)
                 .cooldown(COOLDOWN_MILLIS)
+                .cooldownMessage(COOLDOWN_MSG)
                 .build();
     }
 
     @Override
-    public void addPlayer(final UUID playerID) {
-        this.players.put(playerID, initializeCooldownHandler(playerID));
+    public void addPlayer(UUID playerID) {
+        players.put(playerID, initializeCooldownHandler(playerID));
     }
 
     @Override
-    public boolean shouldCancelEvent () {
+    public boolean shouldCancelEvent() {
         return SHOULD_CANCEL_EVENT;
     }
 
     @Override
-    public void cast(final PlayerState playerState) {
+    public void cast(PlayerState playerState) {
         if (!canUseSpell(playerState)) return;
-        Inventory spellInventory = playerState.getMage()
-                .getSpellManager()
-                .getSpellInventory();
-        playerState.getMage()
-                .getInventoryHandler()
-                .getViewingInventory()
-                .viewInventory(spellInventory);
+        playerState.getPlayer().ifPresent(player -> {
+            if (player.getInventory().getChestplate() == null) {
+                player.getInventory().setChestplate(getElytra());
+            } else {
+                player.getInventory().addItem(getElytra());
+            }
+        });
         putOnCooldown(playerState);
+    }
+
+    private ItemStack getElytra () {
+        return new ItemStack(Material.ELYTRA, 1);
     }
 }

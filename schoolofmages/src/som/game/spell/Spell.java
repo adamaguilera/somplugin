@@ -22,14 +22,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 public abstract class Spell {
-    public abstract String getName ();
+    public abstract SpellName getName ();
+    public abstract String getDisplayName();
     public abstract List<String> getDescription ();
     public abstract Material getDisplayType ();
     public abstract int getCost ();
     public abstract List<Material> getSpellItems ();
     public abstract Optional<CooldownHandler> getCooldownHandler (final UUID playerID);
     public abstract boolean hasSpell (final UUID playerID);
+    public abstract CooldownHandler initializeCooldownHandler (final UUID playerID);
     public abstract void addPlayer (final UUID playerID);
+    public abstract boolean shouldCancelEvent ();
     public abstract void cast (final PlayerState playerState);
 
 
@@ -37,7 +40,7 @@ public abstract class Spell {
         ItemStack display = new ItemStack(getDisplayType(), 1);
         ItemMeta meta = display.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(getName());
+            meta.setDisplayName(getDisplayName());
             meta.setLore(getDescription());
             display.setItemMeta(meta);
         }
@@ -56,8 +59,8 @@ public abstract class Spell {
                 !getCooldownHandler(playerState.getPlayerID()).get().onCooldown();
     }
 
-    public void putOnCooldown (final UUID playerID) {
-        getCooldownHandler(playerID)
+    public void putOnCooldown (final PlayerState playerState) {
+        getCooldownHandler(playerState.getPlayerID())
                 .ifPresent(CooldownHandler::putOnCooldown);
     }
     private ManaHandler getManaHandler (final PlayerState playerState) {

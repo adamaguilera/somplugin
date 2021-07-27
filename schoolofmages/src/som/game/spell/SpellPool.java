@@ -1,11 +1,8 @@
 package som.game.spell;
 
-import lombok.Data;
-import lombok.Getter;
+import som.game.spell.spells.ParachuteSpell;
 import som.game.spell.spells.SpellBook;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,14 +11,23 @@ import java.util.Random;
 public class SpellPool {
     final int MAX_ITERATIONS = 100;
     final Random random = new Random();
-    List<Spell> spellList;
-    static SpellBook spellBook;
+    List<Spell> spellList = List.of(new SpellBook(), new ParachuteSpell());
+    List<Spell> startingSpells;
 
-    public static SpellBook GET_SPELL_BOOK () {
-        if (spellBook == null) {
-            spellBook = new SpellBook();
+
+    public List<Spell> getStartingSpells () {
+        if (startingSpells == null) {
+            startingSpells = new ArrayList<>();
+            getSpell(SpellName.SpellBook).ifPresent(startingSpells::add);
+            getSpell(SpellName.ParachuteSpell).ifPresent(startingSpells::add);
         }
-        return spellBook;
+        return startingSpells;
+    }
+
+    public Optional<Spell> getSpell (final SpellName name) {
+        return spellList.stream()
+                .filter(spell -> spell.getName() == name)
+                .findFirst();
     }
 
     public List<Spell> discoverSpell (final int amount) {
