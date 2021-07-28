@@ -1,22 +1,12 @@
 package som.game.spell;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import som.chat.Log;
-import som.game.mage.Mage;
 import som.game.mage.spell.ManaHandler;
 import som.game.spell.cooldown.CooldownHandler;
-import som.player.PlayerManager;
 import som.player.PlayerState;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

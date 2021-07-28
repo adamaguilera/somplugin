@@ -7,6 +7,14 @@
 # BlueJ files
 *.ctxt
 
+# IntelliJ files
+/workspace.xml
+/out
+/.idea/
+/target
+*.iml
+/shelf/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

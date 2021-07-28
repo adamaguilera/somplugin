@@ -10,7 +10,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import som.chat.Chat;
-import som.game.spell.SpellPool;
 import som.game.spell.spells.ParachuteSpell;
 import som.game.spell.spells.SpellBook;
 import som.player.PlayerState;

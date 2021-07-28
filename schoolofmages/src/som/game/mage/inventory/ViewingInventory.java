@@ -8,12 +8,17 @@ import som.player.PlayerState;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
+
 public class ViewingInventory {
     final PlayerState playerState;
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     Optional<Inventory> viewingInventory;
     Runnable onForceClose = EMPTY_FORCE_CLOSE();
+
+    public ViewingInventory (final PlayerState playerState) {
+        this.playerState = playerState;
+        this.viewingInventory = Optional.empty();
+    }
 
     public Runnable EMPTY_FORCE_CLOSE () { return () -> {}; }
 

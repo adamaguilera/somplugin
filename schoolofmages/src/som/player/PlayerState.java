@@ -10,6 +10,7 @@ import som.chat.Chat;
 import som.chat.Log;
 import som.game.mage.Mage;
 import som.game.passive.PassivePool;
+import som.game.scoreboard.Leaderboard;
 import som.game.spell.SpellPool;
 
 import java.util.Optional;
@@ -30,10 +31,11 @@ public class PlayerState implements Comparable<PlayerState> {
 
     public PlayerState (final UUID playerID,
                         final SpellPool spellPool,
-                        final PassivePool passivePool) {
+                        final PassivePool passivePool,
+                        final Leaderboard leaderboard) {
         this.playerID = playerID;
         this.lobbyPlayer = new LobbyPlayer(playerID);
-        this.mage = new Mage (this, spellPool, passivePool);
+        this.mage = new Mage (this, spellPool, passivePool, leaderboard);
     }
 
     public Optional<Player> getPlayer() {
@@ -65,7 +67,7 @@ public class PlayerState implements Comparable<PlayerState> {
 
     @Override
     public int compareTo(@NotNull PlayerState o) {
-        return Integer.compare(getMage().getKills(),
-                o.getMage().getKills());
+        return Integer.compare(getMage().getScoreKeeper().getScore(),
+                o.getMage().getScoreKeeper().getScore());
     }
 }

@@ -3,9 +3,11 @@ package som.game;
 import lombok.Getter;
 import som.Main;
 import som.chat.Chat;
+import som.chat.Log;
 import som.game.mage.Mage;
 import som.game.mage.inventory.InventoryHandler;
 import som.game.mage.inventory.StartingInventory;
+import som.game.mage.mechanics.RespawnHandler;
 import som.game.mage.spell.PassiveHandler;
 import som.game.passive.PassivePool;
 import som.game.scoreboard.Leaderboard;
@@ -15,28 +17,30 @@ import som.player.PlayerManager;
 import som.player.PlayerState;
 import som.task.TaskRegister;
 
+import java.util.Optional;
+
 
 public class Game {
     final String ON_GAME_START = "Game has started!";
     @Getter
     final PlayerManager playerManager;
     final Leaderboard leaderboard;
-    final Platform platform;
+    static Platform platform;
     final TaskRegister taskRegister;
     final SpellPool spellPool;
     final PassivePool passivePool;
     final Chat chat = new Chat();
+
 
     public Game (final GameConfig gameConfig,
                  final PlayerManager playerManager) {
         this.spellPool = new SpellPool();
         this.passivePool = new PassivePool();
         this.playerManager = playerManager;
-        this.leaderboard = Leaderboard.builder()
-                .playerManager(this.playerManager)
-                .build();
-        this.platform = gameConfig.getPlatform();
-        this.platform.generatePlatform();
+        this.leaderboard = playerManager.getLeaderboard();
+        platform = gameConfig.getPlatform();
+        platform.generatePlatform();
+        platform.setWorldSpawn();
         this.taskRegister = new TaskRegister();
     }
 
@@ -49,6 +53,10 @@ public class Game {
         this.giveStartingItems();
         this.giveStartingPassives();
         this.spawnAllPlayers();
+    }
+
+    public static Platform GET_PLATFORM () {
+        return platform;
     }
 
     private void spawnPlayer (final PlayerState playerState) {

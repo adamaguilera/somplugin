@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import som.chat.Log;
 
 @Builder
 public class Space {
@@ -15,6 +16,7 @@ public class Space {
 
     // determines whether or not the coordinate is within the space
     public boolean inside (Location location) {
+
         // test x then tests y then tests z
         return (cmp (first.getX(), second.getX(), location.getBlockX())) &&
                 (cmp (first.getY(), second.getY(), location.getBlockY())) &&

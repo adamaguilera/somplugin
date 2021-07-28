@@ -16,7 +16,6 @@ public class Platform {
     final Space platform;
 
     public void generatePlatform () {
-
         for (int x = -1*PLATFORM_RADIUS; x <= PLATFORM_RADIUS; x ++) {
             for (int z = -1*PLATFORM_RADIUS; z <= PLATFORM_RADIUS; z ++) {
                 Location platformBlock = new Location(getWorld(), x, platform.getMinY(), z);
@@ -30,6 +29,10 @@ public class Platform {
                 }
             }
         }
+    }
+
+    public void setWorldSpawn () {
+        getWorld().setSpawnLocation(getSpawn());
     }
 
     private World getWorld () {

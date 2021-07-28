@@ -52,16 +52,16 @@ public class Leaderboard {
             Mage mage = playerState.getMage();
             playerState.getPlayer().ifPresent(player -> {
                 objective.getScore(player.getDisplayName())
-                        .setScore(mage.getKills());
+                        .setScore(mage.getScoreKeeper().getScore());
             });
         }
     }
 
     private void addPlayerInformation (final PlayerState playerState,
                                              final Objective objective) {
-        int kills = playerState.getMage().getKills();
+        int kills = playerState.getMage().getScoreKeeper().getScore();
         objective.getScore(TOP_BAR).setScore(TOP_BAR_SCORE);
-        objective.getScore("You have " + kills + " kills!")
+        objective.getScore("You have " + kills + " points!")
                 .setScore(PLAYER_KILLS_SCORE);
         objective.getScore(BOT_BAR).setScore(BOT_BAR_SCORE);
     }

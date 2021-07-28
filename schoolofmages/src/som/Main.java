@@ -5,6 +5,7 @@ import som.chat.Log;
 import som.command.CommandHandler;
 import som.game.Game;
 import som.game.passive.PassivePool;
+import som.game.scoreboard.Leaderboard;
 import som.game.spell.SpellPool;
 import som.lobby.Lobby;
 import som.player.LoginManager;

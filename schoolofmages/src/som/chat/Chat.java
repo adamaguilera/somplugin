@@ -34,4 +34,12 @@ public class Chat {
     private String formatGlobalMessage (final String message) {
         return ChatColor.LIGHT_PURPLE + "SOM - " + message + ChatColor.WHITE;
     }
+
+    public void gameMessage (final UUID playerID, final String message) {
+        sendMessage(playerID, formatGameMessage(message));
+    }
+
+    private String formatGameMessage (final String message) {
+        return ChatColor.LIGHT_PURPLE + "SOM - " + message + ChatColor.WHITE;
+    }
 }
